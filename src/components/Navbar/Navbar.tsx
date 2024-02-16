@@ -4,6 +4,7 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Icons from "@/components/Icons";
 import { buttonVariants } from "@/components/ui/button";
 import NavItems from "./NavItems";
+import Cart from "@/components/Cart";
 
 type Props = {};
 
@@ -64,7 +65,7 @@ function Navbar({}: Props) {
                     </div>
                   )}
 
-                  <div className="ml-4 flow-root lg:ml-6">{/* <Cart /> */}</div>
+                  <div className="ml-4 flow-root lg:ml-6">{<Cart />}</div>
                 </div>
               </div>
             </div>
