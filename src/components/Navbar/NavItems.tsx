@@ -1,8 +1,8 @@
 "use client";
-import { PRODUCT_CATEGORIES } from "@/config";
 import React, { useEffect, useRef, useState } from "react";
-import NavItem from "@/components/NavItem";
+import { PRODUCT_CATEGORIES } from "@/config";
 import { useOnClickOutside } from "usehooks-ts";
+import NavItem from "./NavItem";
 
 type Props = {};
 

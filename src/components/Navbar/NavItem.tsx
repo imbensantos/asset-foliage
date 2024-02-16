@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { PRODUCT_CATEGORIES } from "@/config";
-import { Button } from "./ui/button";
-import { ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { PRODUCT_CATEGORIES } from "@/config";
+import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
 
 type Category = (typeof PRODUCT_CATEGORIES)[number];
 
@@ -62,7 +62,7 @@ function NavItem({ category, handleOpen, isAnyOpen, isOpen }: NavItemProps) {
                             src={item.imageSrc}
                             alt="Product Category Image"
                             fill
-                            className="object-cover object-center cursor-pointer"
+                            className="cursor-pointer object-cover object-center"
                           />
                         </Link>
                       </div>

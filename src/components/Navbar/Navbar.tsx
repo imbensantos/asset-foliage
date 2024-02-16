@@ -1,9 +1,9 @@
 import React from "react";
-import MaxWidthWrapper from "./MaxWidthWrapper";
 import Link from "next/link";
-import Icons from "./Icons";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import Icons from "@/components/Icons";
+import { buttonVariants } from "@/components/ui/button";
 import NavItems from "./NavItems";
-import { buttonVariants } from "./ui/button";
 
 type Props = {};
 
@@ -55,13 +55,16 @@ function Navbar({}: Props) {
                     <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
                   ) : null}
 
-                  {user ? null : <div className="flex lg:ml-6">
-                    <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                  </div> }
-                  
-                  <div className="ml-4 flow-root lg:ml-6">
-                    {/* <Cart /> */}
-                  </div>
+                  {user ? null : (
+                    <div className="flex lg:ml-6">
+                      <span
+                        className="h-6 w-px bg-gray-200"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  )}
+
+                  <div className="ml-4 flow-root lg:ml-6">{/* <Cart /> */}</div>
                 </div>
               </div>
             </div>
