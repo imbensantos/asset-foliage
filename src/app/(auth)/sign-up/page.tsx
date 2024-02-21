@@ -15,6 +15,7 @@ import {
   AuthCredentialsValidator,
   TAuthCredentialsValidator,
 } from "@/lib/validators/account-credentials-validator";
+import { trpc } from "@/trpc/client";
 
 type Props = {};
 
@@ -26,6 +27,8 @@ function Page({}: Props) {
   } = useForm<TAuthCredentialsValidator>({
     resolver: zodResolver(AuthCredentialsValidator),
   });
+
+  const { data } = trpc.anyApiRoute.useQuery();
 
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
     // send data to the server
