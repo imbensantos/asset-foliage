@@ -1,11 +1,14 @@
-import dotenv from "dotenv";
+import dotenv, { configDotenv } from "dotenv";
 import path from "path";
-import payload from "payload";
+import payload, { Payload } from "payload";
 import type { InitOptions } from "payload/config";
+import nodemailer from "nodemailer";
 
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
 });
+
+const { PAYLOAD_SECRET, RESEND_API_KEY } = process.env
 
 let cached = (global as any).payload;
 
@@ -16,12 +19,24 @@ if (!cached) {
   };
 }
 
+const transporter = nodemailer.createTransport({
+  host: "smtp.resend.com",
+  secure: true,
+  port: 465,
+  auth: {
+    user: "resend",
+    pass: RESEND_API_KEY,
+  },
+});
+
 interface Args {
   initOptions?: Partial<InitOptions>;
 }
 
-export const getPayloadClient = async ({ initOptions }: Args = {}) => {
-  if (!process.env.PAYLOAD_SECRET) {
+export const getPayloadClient = async ({
+  initOptions,
+}: Args = {}): Promise<Payload> => {
+  if (!PAYLOAD_SECRET) {
     throw new Error("PAYLOAD_SECRET is missing");
   }
 
@@ -30,8 +45,13 @@ export const getPayloadClient = async ({ initOptions }: Args = {}) => {
   }
 
   if (!cached.promise) {
-    cached.promise = payload.init({
-      secret: process.env.PAYLOAD_SECRET,
+    cached.promise = await payload.init({
+      email: {
+        transport: transporter,
+        fromAddress: "onboarding@resend.dev",
+        fromName: "AssetFoliage"
+      },
+      secret: PAYLOAD_SECRET,
       local: initOptions?.express ? false : true,
       ...(initOptions || {}),
     });

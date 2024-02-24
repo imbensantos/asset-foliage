@@ -10,16 +10,20 @@ import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import {
   AuthCredentialsValidator,
   TAuthCredentialsValidator,
 } from "@/lib/validators/account-credentials-validator";
 import { trpc } from "@/trpc/client";
+import { ZodError } from "zod";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 function Page({}: Props) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -28,10 +32,30 @@ function Page({}: Props) {
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
-  const { data } = trpc.anyApiRoute.useQuery();
+  const { mutate, isLoading } = trpc.auth.createPayloadUser.useMutation({
+    onError: (err) => {
+      if (err.data?.code === "CONFLICT") {
+        toast.error("This email is already in use. Sign in instead?");
+
+        return;
+      }
+
+      if (err instanceof ZodError) {
+        toast.error(err.issues[0].message);
+
+        return;
+      }
+
+      toast.error("Something went wrong. Please try again.");
+    },
+    onSuccess: ({ sentToEmail }) => {
+      toast.success(`Verification email sent to ${sentToEmail}.`);
+      router.push(`/verify-email?to=${sentToEmail}`);
+    },
+  });
 
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
-    // send data to the server
+    mutate({ email, password });
   };
 
   return (
@@ -65,6 +89,7 @@ function Page({}: Props) {
                       "focus-visible:ring-red-500": errors.password,
                     })}
                     placeholder="Password"
+                    type="password"
                   />
                 </div>
 
