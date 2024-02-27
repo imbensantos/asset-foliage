@@ -43,19 +43,15 @@ function Page({}: Props) {
     onSuccess: () => {
       toast.success("Logged in successfully");
 
-      router.refresh();
-
-      if (origin) {
+      if(origin){
         router.push(`/${origin}`);
-        return;
-      }
-
-      if (isSeller) {
+      }else if(isSeller){
         router.push("/sell");
-        return;
+      }else{
+        router.push("/");
       }
-
-      router.push("/");
+      
+      router.refresh();
     },
 
     onError: (err) => {

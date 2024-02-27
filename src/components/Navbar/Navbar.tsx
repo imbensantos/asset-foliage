@@ -5,11 +5,15 @@ import Icons from "@/components/Icons";
 import { buttonVariants } from "@/components/ui/button";
 import NavItems from "./NavItems";
 import Cart from "@/components/Cart";
+import { getServerSideUser } from "@/lib/payload-utils";
+import { cookies } from "next/headers";
+import UserAccountNav from "./UserAccountNav";
 
 type Props = {};
 
-function Navbar({}: Props) {
-  const user = null;
+async function Navbar({}: Props) {
+  const nextCookies = cookies();
+  const { user } = await getServerSideUser(nextCookies);
 
   return (
     <div className="sticky inset-x-0 top-0 z-50 h-16 bg-white">
@@ -32,28 +36,34 @@ function Navbar({}: Props) {
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                   {user ? null : (
-                    <Link
-                      href="/login"
-                      className={buttonVariants({ variant: "ghost" })}
-                    >
-                      Login
-                    </Link>
-                  )}
-
-                  {user ? null : (
-                    <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                  )}
-                  {user ? null : (
-                    <Link
-                      href="/sign-up"
-                      className={buttonVariants({ variant: "ghost" })}
-                    >
-                      Create account
-                    </Link>
+                    <>
+                      <Link
+                        href="/login"
+                        className={buttonVariants({ variant: "ghost" })}
+                      >
+                        Login
+                      </Link>
+                      <span
+                        className="h-6 w-px bg-gray-200"
+                        aria-hidden="true"
+                      />
+                      <Link
+                        href="/sign-up"
+                        className={buttonVariants({ variant: "ghost" })}
+                      >
+                        Create account
+                      </Link>
+                    </>
                   )}
 
                   {user ? (
-                    <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
+                    <>
+                      <UserAccountNav user={user} />
+                      <span
+                        className="h-6 w-px bg-gray-200"
+                        aria-hidden="true"
+                      />
+                    </>
                   ) : null}
 
                   {user ? null : (
