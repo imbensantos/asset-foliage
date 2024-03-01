@@ -1,4 +1,4 @@
-import { PRODUCT_CATEGORIES } from "../../config";
+import { PRODUCT_CATEGORIES } from "../config";
 import { CollectionConfig, FieldAccess } from "payload/types";
 
 const isAdmin: FieldAccess = ({ req: { user } }) =>

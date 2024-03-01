@@ -3,12 +3,9 @@ import { webpackBundler } from "@payloadcms/bundler-webpack";
 import { slateEditor } from "@payloadcms/richtext-slate";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import path from "path";
-import { Users } from "./collections/Users";
 import dotenv from "dotenv";
-import { Products } from "./collections/Products";
-import { Media } from "./collections/Media";
-import { ProductFiles } from "./collections/ProductFile";
-import { Orders } from "./collections/Orders";
+import { Media, Orders, ProductFiles, Products, Users } from "./collections";
+
 
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
