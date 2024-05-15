@@ -9,7 +9,11 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: "name",
   },
-  access: {},
+  access: {
+    read: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
+  },
   fields: [
     {
       name: "user",
