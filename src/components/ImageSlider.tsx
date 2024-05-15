@@ -1,12 +1,12 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
 import type SwiperType from "swiper";
 import { Pagination } from "swiper/modules";
 import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import "swiper/css";
+import "swiper/css/pagination";
 
 interface Props {
   urls: string[];
@@ -37,7 +37,7 @@ const ImageSlider = ({ urls }: Props) => {
   }, [swiper, urls]);
 
   return (
-    <div className="grou relatrive aspect-square overflow-hidden rounded-xl bg-zinc-100">
+    <div className="group relative aspect-square overflow-hidden rounded-xl bg-zinc-100">
       <div className="absolute inset-0 z-10 opacity-0 transition group-hover:opacity-100">
         <button
           onClick={(e) => {
@@ -55,9 +55,29 @@ const ImageSlider = ({ urls }: Props) => {
             aria-label="next image"
           ></ChevronRight>
         </button>
-        <button></button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            swiper?.slidePrev();
+          }}
+          className={cn(activeStyles, "left-3 transition", {
+            [inactiveStyles]: slideConfig.isBeginning,
+            "hover:bg-primary-300 text-primary-800 opacity-100":
+              !slideConfig.isBeginning,
+          })}
+        >
+          <ChevronLeft
+            className="h-4 w-4 text-zinc-700"
+            aria-label="previous image"
+          ></ChevronLeft>
+        </button>
       </div>
       <Swiper
+        pagination={{
+          renderBullet: (_, className) => {
+            return `<span class="rounded-full transition ${className}"></span>`
+          }
+        }}
         onSwiper={(swiper) => setSwiper(swiper)}
         spaceBetween={50}
         modules={[Pagination]}

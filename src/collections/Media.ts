@@ -42,8 +42,8 @@ export const Media: CollectionConfig = {
     update: isAdminOrHasAccessToImages()
   },
   upload: {
-    staticURL: "/store/media",
-    staticDir: "store/media",
+    staticURL: "/storage/media",
+    staticDir: "storage/media",
     imageSizes: [
       {
         name: "thumbnail",

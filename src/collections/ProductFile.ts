@@ -71,8 +71,8 @@ export const ProductFiles: CollectionConfig = {
     delete: isAdmin,
   },
   upload: {
-    staticURL: "/store/product_files",
-    staticDir: "store/product_files",
+    staticURL: "/storage/product_files",
+    staticDir: "storage/product_files",
     mimeTypes: ["image/*", "font/*", "application/postscript", "application/x-zip"],
   },
   fields: [
