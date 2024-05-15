@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -40,7 +40,7 @@ const ImageSlider = ({ urls }: Props) => {
 
   return (
     <div className="group relative aspect-square overflow-hidden rounded-xl bg-zinc-100">
-      <div className="absolute inset-0 z-10 opacity-0 transition group-hover:opacity-100">
+      <div className="absolute inset-0 opacity-0 transition group-hover:opacity-100">
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -75,10 +75,11 @@ const ImageSlider = ({ urls }: Props) => {
         </button>
       </div>
       <Swiper
+        draggable="true"
         pagination={{
-          renderBullet: (_, className) => {
-            return `<span class="rounded-full transition ${className}"></span>`
-          }
+          renderBullet: (_, className) =>
+            `<span class="rounded-full transition ${className}"></span>`,
+          clickable: true,
         }}
         onSwiper={(swiper) => setSwiper(swiper)}
         spaceBetween={50}
