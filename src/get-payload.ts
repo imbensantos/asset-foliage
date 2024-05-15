@@ -1,4 +1,4 @@
-import dotenv, { configDotenv } from "dotenv";
+import dotenv from "dotenv";
 import path from "path";
 import payload, { Payload } from "payload";
 import type { InitOptions } from "payload/config";
@@ -36,9 +36,10 @@ interface Args {
 export const getPayloadClient = async ({
   initOptions,
 }: Args = {}): Promise<Payload> => {
-  if (!PAYLOAD_SECRET) {
-    throw new Error("PAYLOAD_SECRET is missing");
-  }
+
+  // if (!PAYLOAD_SECRET) {
+  //   throw new Error("PAYLOAD_SECRET env variable is missing");
+  // }
 
   if (cached.client) {
     return cached.client;
@@ -51,7 +52,7 @@ export const getPayloadClient = async ({
         fromAddress: "onboarding@resend.dev",
         fromName: "AssetFoliage"
       },
-      secret: PAYLOAD_SECRET,
+      secret: PAYLOAD_SECRET as string,
       local: initOptions?.express ? false : true,
       ...(initOptions || {}),
     });

@@ -18,7 +18,7 @@ const createContext = ({
 
 export type ExpressContext = inferAsyncReturnType<typeof createContext>;
 
-const start = async () => {
+const start = async (): Promise<void> => {
   const payload = await getPayloadClient({
     initOptions: {
       express: app,
