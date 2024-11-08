@@ -26,7 +26,7 @@ export const Media: CollectionConfig = {
       },
     ],
   },
-  admin: { hidden: ({ user }) => (user.role !== "admin") },
+  admin: { hidden: ({ user }) => (user.role === "user") },
   access: {
     read: async ({ req }) => {
       const referer = req.headers.referer;

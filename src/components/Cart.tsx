@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Sheet,
@@ -15,12 +15,24 @@ import { Separator } from "./ui/separator";
 import { formatPrice } from "@/lib/utils";
 import { buttonVariants } from "./ui/button";
 import Image from "next/image";
+import { useCart } from "@/hooks/use-cart";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
+import CartItem from "./Cartitem";
 
 type Props = {};
 
-function Cart({}: Props) {
-  const itemCount = 0;
-  const fee = 1;
+function Cart({ }: Props) {
+  const { items } = useCart()
+  const itemCount = items.length;
+
+  const [isMounted, setIsMounted] = useState<boolean>(false)
+
+  const cartTotal = items.reduce((total, { product }) => total + product.price, 0)
+  const fee = 0;
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   return (
     <Sheet>
@@ -30,7 +42,7 @@ function Cart({}: Props) {
           className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
         />
         <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-          0
+          {isMounted ? itemCount: 0}
         </span>
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col pr-0 sm:max-w-lg">
@@ -40,8 +52,11 @@ function Cart({}: Props) {
         {itemCount > 0 ? (
           <>
             <div className="flex w-full flex-col pr-6">
-              {/* TODO: cart logic */}
-              cart items
+              <ScrollArea>
+              {items.map(({product}) => (
+                <CartItem product={product} key={product.id} />
+              ))}
+              </ScrollArea>
             </div>
             <div className="space-y-4 pr-6">
               <Separator />
@@ -56,7 +71,7 @@ function Cart({}: Props) {
                 </div>
                 <div className="flex">
                   <span className="flex-1 font-bold">Total</span>
-                  <span className="font-bold">{formatPrice(fee)}</span>
+                  <span className="font-bold">{formatPrice(cartTotal + fee)}</span>
                 </div>
               </div>
 

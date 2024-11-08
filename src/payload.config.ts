@@ -21,7 +21,7 @@ export default buildConfig({
     user: "users",
     bundler: webpackBundler(),
     meta: {
-      titleSuffix: " - AssetFoliage",
+      titleSuffix: " - Asset Foliage",
       favicon: "/favicon.ico",
       ogImage: "/thumbnail.jpg",
     },

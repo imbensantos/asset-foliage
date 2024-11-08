@@ -34,7 +34,7 @@ function UserAccountNav({ user }: Props) {
         </div>
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
+        <DropdownMenuItem asChild className="cursor-pointer">
           <Link href="/sell">Seller Dashboard</Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer" onClick={signOut}>

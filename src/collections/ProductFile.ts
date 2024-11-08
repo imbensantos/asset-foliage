@@ -61,7 +61,7 @@ const isAdmin: Access = ({ req: { user } }) =>
 
 export const ProductFiles: CollectionConfig = {
   slug: "product_files",
-  admin: { hidden: ({ user }) => user.role !== "admin" },
+  admin: { hidden: ({ user }) => user.role === "user" },
   hooks: {
     beforeChange: [addUser],
   },
@@ -71,9 +71,15 @@ export const ProductFiles: CollectionConfig = {
     delete: isAdmin,
   },
   upload: {
-    staticURL: "/storage/product_files",
-    staticDir: "storage/product_files",
-    mimeTypes: ["image/*", "font/*", "application/postscript", "application/x-zip"],
+    staticURL: "/storage/product_files", // URL where the files will be accessible
+    staticDir: "storage/product_files",  // Directory where the files will be stored on the server
+    mimeTypes: [
+      "image/*",                   // Allow all image types
+      "font/*",                     // Allow all font types
+      "application/postscript",     // Allow postscript files
+      "application/x-zip-compressed", // Allow zip files
+      "application/zip"             // Specifically allow zip files
+    ],
   },
   fields: [
     {

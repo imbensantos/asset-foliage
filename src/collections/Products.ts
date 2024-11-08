@@ -1,3 +1,4 @@
+import { slateEditor } from "@payloadcms/richtext-slate";
 import { PRODUCT_CATEGORIES } from "../config";
 import { CollectionConfig, FieldAccess } from "payload/types";
 
@@ -35,6 +36,16 @@ export const Products: CollectionConfig = {
       name: "description",
       label: "Product Details",
       type: "textarea",
+      // TODO: Implement richText editor and rendering
+      // type: "richText",
+      // editor: slateEditor({
+      //   admin: {
+      //     elements: [
+      //       'link', 'ol', 'ul'
+      //     ],
+      //     leaves: ['bold', 'italic', 'code', 'strikethrough', 'underline']
+      //   }
+      // })
     },
     {
       name: "price",

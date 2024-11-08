@@ -39,7 +39,7 @@ function VerifyEmail({ token }: Props) {
         <p className="mt-1 text-center text-muted-foreground">
           Thank you for verifying your email.
         </p>
-        <Link className={buttonVariants({ className: "mt-4" })} href="/sign-in">
+        <Link className={buttonVariants({ className: "mt-4" })} href="/login">
           Login
         </Link>
       </div>
