@@ -30,7 +30,7 @@ function ProductReel(props: Props) {
       },
     );
 
-  const products = queryResults?.pages.flatMap((page) => page.items);
+  const products = queryResults?.pages.flatMap((page) => page.items as unknown as Product);
 
   let productsList: (Product | null)[] = [];
 
@@ -70,7 +70,7 @@ function ProductReel(props: Props) {
         <div className="item-center mt-6 flex w-full">
           <div className="grid w-full grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-10 lg:gap-x-8">
             {productsList.map((product, i) => (
-              <ProductListing product={product} index={i} key={i} />
+              <ProductListing product={product} index={i} key={product?.id ?? `product-${i}`} />
             ))}
           </div>
         </div>

@@ -5,6 +5,7 @@ import ProductReel from "@/components/ProductReel";
 import { PRODUCT_CATEGORIES } from "@/config";
 import { getPayloadClient } from "@/get-payload";
 import { formatPrice } from "@/lib/utils";
+import { Product } from "@/payload-types";
 import { CheckIcon, ShieldIcon } from "lucide-react";
 import { getStaticProps } from "next/dist/build/templates/pages";
 import Link from "next/link";
@@ -36,7 +37,7 @@ async function Page({ params }: PageProps) {
     },
   });
 
-  const [product] = products; 
+  const [product] = products as unknown as Product[]; 
 
   if (!product) return notFound();
 
