@@ -1,9 +1,21 @@
 import { slateEditor } from "@payloadcms/richtext-slate";
 import { PRODUCT_CATEGORIES } from "../config";
-import { CollectionConfig, FieldAccess } from "payload/types";
+import {
+  CollectionBeforeChangeHook,
+  CollectionConfig,
+  FieldAccess,
+} from "payload/types";
+import { Product } from "../payload-types";
+import Stripe from "stripe";
 
 const isAdmin: FieldAccess = ({ req: { user } }) =>
   user.role === "admin" || user.role === "super_admin";
+
+const addUser: CollectionBeforeChangeHook<Product> = async ({ req, data }) => {
+  const user = req.user;
+
+  return { ...data, user: user.id };
+};
 
 export const Products: CollectionConfig = {
   slug: "products",
@@ -14,6 +26,53 @@ export const Products: CollectionConfig = {
     read: isAdmin,
     update: isAdmin,
     delete: isAdmin,
+  },
+  hooks: {
+    beforeChange: [
+      addUser,
+      async (args) => {
+
+        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
+          apiVersion: "2024-10-28.acacia",
+          typescript: true,
+        });
+
+        if (args.operation === "create") {
+          const data = args.data as Product;
+
+          const createdProduct = await stripe.products.create({
+            name: data.name,
+            default_price_data: {
+              currency: "USD",
+              unit_amount: Math.round(data.price * 100), // product price in cents
+            },
+          });
+
+          const updated: Product = {
+            ...data,
+            stripeId: createdProduct.id,
+            priceId: createdProduct.default_price as string,
+          };
+
+          return updated;
+        } else if (args.operation === "update") {
+          const data = args.data as Product;
+
+          const updatedProduct = await stripe.products.update(data.stripeId!, {
+            name: data.name,
+            default_price: data.priceId!,
+          });
+
+          const updated: Product = {
+            ...data,
+            stripeId: updatedProduct.id,
+            priceId: updatedProduct.default_price as string,
+          };
+
+          return updated;
+        }
+      },
+    ],
   },
   fields: [
     {
