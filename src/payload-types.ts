@@ -24,7 +24,7 @@ export interface Config {
  */
 export interface User {
   id: string;
-  role: 'admin' | 'user' | 'super_admin';
+  role?: ('admin' | 'user' | 'super_admin') | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -75,6 +75,8 @@ export interface ProductFile {
   filesize?: number | null;
   width?: number | null;
   height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -91,6 +93,8 @@ export interface Media {
   filesize?: number | null;
   width?: number | null;
   height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
   sizes?: {
     thumbnail?: {
       url?: string | null;
@@ -163,9 +167,4 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
-}
-
-
-declare module 'payload' {
-  export interface GeneratedTypes extends Config {}
 }

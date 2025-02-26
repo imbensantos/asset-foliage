@@ -105,7 +105,7 @@ async function ThankYouPage({ searchParams }: PageProps) {
                 const { image } = product.images[0];
 
                 return (
-                  <li className="flex space-x-6 py-6">
+                  <li key={product.id} className="flex space-x-6 py-6">
                     <div className="relative h-24 w-24">
                       {typeof image !== "string" && image.url ? (
                         <Image

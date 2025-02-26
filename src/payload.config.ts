@@ -6,7 +6,6 @@ import path from "path";
 import dotenv from "dotenv";
 import { Media, Orders, ProductFiles, Products, Users } from "./collections";
 
-
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
 });
