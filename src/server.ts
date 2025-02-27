@@ -31,8 +31,22 @@ const start = async (): Promise<void> => {
     },
   });
 
-  app.post("/api/webhooks/stripe", webhookMiddleware, stripeWebhookHandler)
+  app.post("/api/webhooks/stripe", webhookMiddleware, stripeWebhookHandler);
 
+  // 👉 Run Next.js build if needed (before Payload starts)
+  if (process.env.NEXT_BUILD) {
+    try {
+      console.log("📦 Building Next.js...");
+      // @ts-expect-error
+      await nextBuild(path.join(__dirname, "../"));
+      console.log("✅ Next.js build complete");
+    } catch (error) {
+      console.error("❌ Next.js build failed", error);
+      process.exit(1);
+    }
+  }
+
+  // 👉 Initialize Payload (AFTER Next.js build)
   const payload = await getPayloadClient({
     initOptions: {
       express: app,
@@ -42,35 +56,23 @@ const start = async (): Promise<void> => {
     },
   });
 
-  if (process.env.NEXT_BUILD) {
-    app.listen(PORT, async () => {
-      payload.logger.info("Next.js is building for production");
-
-      // @ts-expect-error
-      await nextBuild(path.join(__dirname, "../"));
-
-      process.exit();
-    });
-  }
-
+  // 👉 TRPC Middleware
   app.use(
     "/api/trpc",
     trpcExpress.createExpressMiddleware({
       router: appRouter,
       createContext,
-    }),
+    })
   );
+
+  // 👉 Start Next.js server
+  await nextApp.prepare();
+  payload.logger.info("🚀 NextJS started");
 
   app.use((req, res) => nextHandler(req, res));
 
-  nextApp.prepare().then(() => {
-    payload.logger.info("NextJS started");
-
-    app.listen(PORT, async () => {
-      payload.logger.info(
-        `NextJS App URL: ${process.env.NEXT_PUBLIC_SERVER_URL}`,
-      );
-    });
+  app.listen(PORT, () => {
+    payload.logger.info(`🌐 NextJS App URL: ${process.env.NEXT_PUBLIC_SERVER_URL}`);
   });
 };
 
