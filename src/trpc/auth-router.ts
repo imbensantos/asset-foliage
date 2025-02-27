@@ -11,7 +11,7 @@ export const authRouter = router({
       const { email, password } = input;
       const payload = await getPayloadClient();
 
-      // check if user already exists
+      // Check if user already exists
       const { docs: users } = await payload.find({
         collection: "users",
         where: {
@@ -23,23 +23,30 @@ export const authRouter = router({
 
       if (users.length !== 0) throw new TRPCError({ code: "CONFLICT" });
 
-      await payload.create({
-        collection: "users",
-        data: {
-          email,
-          password,
-          role: "user",
-        },
-      });
+      try {
+        const newUser = await payload.create({
+          collection: "users",
+          data: {
+            email,
+            password,
+            role: "user",
+          },
+        })
 
-      return { success: true, sentToEmail: email };
+        return { success: true, sentToEmail: email };
+      } catch (err) {
+        console.error("Error creating user:", err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "User creation failed.",
+        });
+      }
     }),
 
   verifyEmail: publicProcedure
     .input(z.object({ token: z.string() }))
     .query(async ({ input }) => {
       const { token } = input;
-
       const payload = await getPayloadClient();
 
       const isVerified = await payload.verifyEmail({

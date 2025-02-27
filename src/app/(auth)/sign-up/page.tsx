@@ -55,7 +55,7 @@ function Page({}: Props) {
   });
 
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
-    mutate({ email, password });
+    mutate({ email, password, role: "user" });
   };
 
   return (

@@ -5,15 +5,34 @@ import { NextRequest } from "next/server";
 export const getServerSideUser = async (
   cookies: NextRequest["cookies"] | ReadonlyRequestCookies,
 ) => {
-  const token = cookies.get("payload-token")?.value;
-  const currentUser = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/me`,
-    {
-      headers: {
-        Authorization: `JWT ${token}`,
-      },
-    },
-  );
+  try {
+    const token = cookies.get("payload-token")?.value;
 
-  return (await currentUser.json()) as { user: User | null };
+    if (!token) {
+      console.warn("🚨 No payload-token found in cookies");
+      return { user: null };
+    }
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/me`,
+      {
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      console.error(
+        `❌ Error fetching user: ${response.status} - ${await response.text()}`,
+      );
+      return { user: null };
+    }
+
+    const data = await response.json();
+    return { user: data.user as User | null };
+  } catch (error) {
+    console.error("🚨 getServerSideUser error:", error);
+    return { user: null };
+  }
 };

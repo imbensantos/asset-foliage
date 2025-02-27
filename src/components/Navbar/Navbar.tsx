@@ -13,7 +13,7 @@ type Props = {};
 
 async function Navbar({}: Props) {
   const nextCookies = cookies();
-  const { user } = await getServerSideUser(nextCookies);
+  const { user } = (await getServerSideUser(nextCookies)) || { user: null };
 
   return (
     <div className="sticky inset-x-0 top-0 z-50 h-16 bg-white">
