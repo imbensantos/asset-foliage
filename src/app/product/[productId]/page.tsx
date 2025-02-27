@@ -7,7 +7,6 @@ import { getPayloadClient } from "@/get-payload";
 import { formatPrice } from "@/lib/utils";
 import { Product } from "@/payload-types";
 import { CheckIcon, ShieldIcon } from "lucide-react";
-import { getStaticProps } from "next/dist/build/templates/pages";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
