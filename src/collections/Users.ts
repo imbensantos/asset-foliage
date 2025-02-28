@@ -8,17 +8,11 @@ export const Users: CollectionConfig = {
   auth: {
     verify: {
       generateEmailHTML: ({ token }) => {
-        return (
-          `<body>
-            <h1>Hi!</h1>
-            <p>Thanks for signing up for <b>Asset Foliage</b>! We’re excited to have you on board. Please verify your email address to complete your registration.</p>
-            <p>Click the link below to verify your email and get started:</p>
-            <p>👉<a href='${process.env.NEXT_PUBLIC_SERVER_URL}/verify-email?token=${token}'>Verify account</a></p>
-            <br />
-            <p>If you didn’t sign up for an account, you can safely ignore this email.</p>
-            <p>Thanks, <br /><b>The Asset Foliage Team</b></p>
-          </body>`
-        );
+        return PrimaryActionEmailHtml({
+          actionLabel: "verify your email and get started",
+          buttonText: "Verify Account",
+          href: `${process.env.NEXT_PUBLIC_SERVER_URL}/verify-email?token=${token}`
+        })
       },
     },
   },
