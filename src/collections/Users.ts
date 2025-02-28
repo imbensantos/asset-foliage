@@ -1,3 +1,5 @@
+import { isSuperAdmin } from "../lib/payload-utils";
+import { PrimaryActionEmailHtml } from "../components/emails/PrimaryActionEmail";
 import { AccessResult } from "payload/config";
 import { CollectionConfig } from "payload/types";
 
@@ -27,7 +29,7 @@ export const Users: CollectionConfig = {
       if (!user) return false;
 
       // Super admins can read all users
-      if (user.role === "super_admin") return true;
+      if (isSuperAdmin(user)) return true;
 
       // Admins can read all users except super_admins
       if (user.role === "admin") {
@@ -43,14 +45,12 @@ export const Users: CollectionConfig = {
     },
 
     // CREATE ACCESS
-    create: ({ req: { user, context }, data }) => {
-      console.log("Request Context: ", context);
-
+    create: ({ req: { user }, data }) => {
       // Allow public sign ups (unauthenticated users)
       if (!user) return true;
 
       // Super admins can create anything
-      if (user.role === "super_admin") return true;
+      if (isSuperAdmin(user)) return true;
 
       // Prevent creation of super_admins by other roles
       if (data?.role === "super_admin") return false;
@@ -67,12 +67,13 @@ export const Users: CollectionConfig = {
       if (!user) return false;
 
       // Super admins can update anything
-      if (user.role === "super_admin") return true;
+      if (isSuperAdmin(user)) return true;
 
       // Admins can update non-super_admin users
       if (user.role === "admin") {
         return {
           role: { not_in: ["super_admin"] },
+          is_super_admin: { not_equals: true },
         };
       }
 
@@ -87,12 +88,13 @@ export const Users: CollectionConfig = {
       if (!user) return false;
 
       // Super admins can delete anything
-      if (user.role === "super_admin") return true;
+      if (isSuperAdmin(user)) return true;
 
       // Admins can delete non-super_admin users
       if (user.role === "admin") {
         return {
           role: { not_in: ["super_admin"] },
+          is_super_admin: { not_equals: true },
         };
       }
 
@@ -103,14 +105,46 @@ export const Users: CollectionConfig = {
     },
   },
 
+  admin: {
+    hidden: ({user}) => {
+      if(!user) return false 
+
+      if(user.role === "user") return true
+      
+      return false
+    },
+    defaultColumns: ["id"]
+  },
   
   fields: [
+    {
+      name: "products",
+      label: "Products",
+      admin: {
+        condition: () => false,
+      
+      },
+      type: "relationship",
+      relationTo: "products",
+      hasMany: true,
+    },
+    {
+      name: "product_files",
+      label: "Products Files",
+      admin: {
+        condition: () => false,
+      
+      },
+      type: "relationship",
+      relationTo: "product_files",
+      hasMany: true,
+    },
     {
       name: "role",
       admin: {
         // Condition will check if user is admin
         condition: (_, __, { user }) =>
-          (user?.role === "admin") || user?.role === "super_admin",
+          (user?.role === "admin" || user?.role === "super_admin" || !!user?.is_super_admin),
         components: {},
       },
       required: true,
@@ -121,6 +155,15 @@ export const Users: CollectionConfig = {
         { label: "User", value: "user" },
         // Super Admin option should only be added through admin panel by super admins
       ],
+    },
+    {
+      name: "is_super_admin",
+      label: "Super Admin Privilege",
+      type: "checkbox",
+      defaultValue: false,
+      admin: {
+        condition: (_, __, {user}) => user?.role === "super_admin" || !!user.is_super_admin
+      }
     },
   ],
 };

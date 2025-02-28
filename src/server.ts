@@ -9,6 +9,8 @@ import { IncomingMessage } from "http";
 import { stripeWebhookHandler } from "./webhooks";
 import nextBuild from "next/dist/build";
 import path from "path";
+import { PayloadRequest } from "payload/types";
+import { parse } from "url";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -55,6 +57,21 @@ const start = async (): Promise<void> => {
       },
     },
   });
+
+  // 👉 Protect cart route to be only accessible to logged in users
+  const cartRouter = express.Router();
+  cartRouter.use(payload.authenticate)
+  cartRouter.get("/", async (req, res) => {
+    const { user, url } = req as PayloadRequest;
+    if(!user){
+      return res.redirect("/login?origin=cart");
+    }
+
+    const parsedUrl = parse(url, true)
+    return nextApp.render(req, res, "/cart", parsedUrl.query);
+  });
+
+  app.use("/cart", cartRouter);
 
   // 👉 TRPC Middleware
   app.use(

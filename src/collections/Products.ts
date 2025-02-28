@@ -1,20 +1,78 @@
-import { slateEditor } from "@payloadcms/richtext-slate";
 import { PRODUCT_CATEGORIES } from "../config";
 import {
+  Access,
   CollectionBeforeChangeHook,
   CollectionConfig,
   FieldAccess,
 } from "payload/types";
-import { Product } from "../payload-types";
+import { Product, User } from "../payload-types";
 import Stripe from "stripe";
+import { AfterChangeHook } from "payload/dist/collections/config/types";
+import { isSuperAdmin } from "../lib/payload-utils";
 
-const isAdmin: FieldAccess = ({ req: { user } }) =>
-  user.role === "admin" || user.role === "super_admin";
+const isSuperOrAdmin: FieldAccess = ({ req: { user } }) =>
+  user.role === "admin" || isSuperAdmin(user);
+
+const isSuperOrAdminOrHasAccess = (): Access => ({ req: { user: _user } }) => {
+  const user = _user as User | undefined;
+
+  if (!user) return false;
+
+  if (user.role === "admin" || isSuperAdmin(user)) return true;
+
+  const userProductIDs = (user.products || []).reduce<Array<string>>(
+    (acc, product) => {
+      if (product) return acc;
+
+      if (typeof product === "string") {
+        acc.push(product);
+      } else {
+        acc.push((product as Product).id);
+      }
+
+      return acc;
+    },
+    [],
+  );
+
+  return { id: { in: userProductIDs } };
+};
 
 const addUser: CollectionBeforeChangeHook<Product> = async ({ req, data }) => {
   const user = req.user;
 
   return { ...data, user: user.id };
+};
+
+const syncUser: AfterChangeHook<Product> = async ({ req, doc }) => {
+  const fullUser = await req.payload.findByID({
+    collection: "users",
+    id: req.user.id,
+  });
+
+  if (fullUser && typeof fullUser === "object") {
+    const { products } = fullUser;
+
+    const allIDs = [
+      ...((products as Product[])?.map((product) =>
+        typeof product === "object" ? product.id : product,
+      ) ?? []),
+    ];
+
+    const createdProductIDs = allIDs.filter(
+      (id, index) => allIDs.indexOf(id) === index,
+    );
+
+    const dataToUpdate = [...createdProductIDs, doc.id];
+
+    await req.payload.update({
+      collection: "users",
+      id: fullUser.id,
+      data: {
+        products: dataToUpdate,
+      },
+    });
+  }
 };
 
 export const Products: CollectionConfig = {
@@ -23,15 +81,14 @@ export const Products: CollectionConfig = {
     useAsTitle: "name",
   },
   access: {
-    read: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    read: isSuperOrAdminOrHasAccess(),
+    update: isSuperOrAdminOrHasAccess(),
+    delete: isSuperOrAdminOrHasAccess(),
   },
   hooks: {
     beforeChange: [
       addUser,
       async (args) => {
-
         const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
           apiVersion: "2025-02-24.acacia",
           typescript: true,
@@ -73,6 +130,7 @@ export const Products: CollectionConfig = {
         }
       },
     ],
+    afterChange: [syncUser],
   },
   fields: [
     {
@@ -140,9 +198,9 @@ export const Products: CollectionConfig = {
         { label: "Denied", value: "denied" },
       ],
       access: {
-        create: isAdmin,
-        read: isAdmin,
-        update: isAdmin,
+        create: isSuperOrAdmin,
+        read: isSuperOrAdmin,
+        update: isSuperOrAdmin,
       },
     },
     {

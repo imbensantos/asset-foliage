@@ -24,7 +24,10 @@ export interface Config {
  */
 export interface User {
   id: string;
-  role?: ('admin' | 'user' | 'super_admin') | null;
+  products?: (string | Product)[] | null;
+  product_files?: (string | ProductFile)[] | null;
+  role?: ('super_admin' | 'admin' | 'user') | null;
+  is_super_admin?: boolean | null;
   updatedAt: string;
   createdAt: string;
   email: string;

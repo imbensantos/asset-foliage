@@ -9,7 +9,6 @@ export const getServerSideUser = async (
     const token = cookies.get("payload-token")?.value;
 
     if (!token) {
-      console.warn("🚨 No payload-token found in cookies");
       return { user: null };
     }
 
@@ -36,3 +35,7 @@ export const getServerSideUser = async (
     return { user: null };
   }
 };
+
+export const isSuperAdmin = (user: User | any) => user?.role === "super_admin" || !!user?.is_super_admin ? true : false;
+
+export const isSuperOrAdmin = (user: User | any) => user?.role === "admin" || isSuperAdmin(user) ? true : false;
