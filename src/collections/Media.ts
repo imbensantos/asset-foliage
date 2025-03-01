@@ -1,13 +1,14 @@
+import { isSuperOrAdmin } from "../lib/payload-utils";
 import { User } from "../payload-types";
 import { Access, AccessArgs, CollectionConfig } from "payload/types";
 
-const isAdminOrHasAccessToImages =
+const isSuperOrAdminOrHasAccess =
   (): Access =>
   async ({ req }) => {
     const user = req.user as User | undefined;
 
     if (!user) return false;
-    if (user.role === "admin" || user.role === "super_admin") return true;
+    if (isSuperOrAdmin(user)) return true;
 
     // If the user owns the image
     return {
@@ -36,10 +37,10 @@ export const Media: CollectionConfig = {
         return true;
       }
 
-      return await isAdminOrHasAccessToImages()({req});
+      return await isSuperOrAdminOrHasAccess()({req});
     },
-    delete: isAdminOrHasAccessToImages(),
-    update: isAdminOrHasAccessToImages()
+    delete: isSuperOrAdminOrHasAccess(),
+    update: isSuperOrAdminOrHasAccess()
   },
   upload: {
     staticURL: "/storage/media",

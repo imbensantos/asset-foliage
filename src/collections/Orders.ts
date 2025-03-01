@@ -1,3 +1,4 @@
+import { isSuperOrAdmin, isSuperOrAdminAccess } from "../lib/payload-utils";
 import { Access, CollectionConfig, FieldAccess } from "payload/types";
 
 const isYourOwn: Access = ({ req: { user } }) => {
@@ -8,10 +9,7 @@ const isYourOwn: Access = ({ req: { user } }) => {
   };
 };
 
-const isAdmin: Access = ({ req: { user } }) =>
-  user.role === "admin" || user.role === "super_admin";
-const isFieldAdmin: FieldAccess = ({ req: { user } }) =>
-  user.role === "admin" || user.role === "super_admin";
+const isSuperOrAdminFieldAccess: FieldAccess = ({ req: { user } }) => isSuperOrAdmin(user);
 
 export const Orders: CollectionConfig = {
   slug: "orders",
@@ -21,16 +19,16 @@ export const Orders: CollectionConfig = {
   },
   access: {
     read: isYourOwn,
-    create: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    create: isSuperOrAdminAccess,
+    update: isSuperOrAdminAccess,
+    delete: isSuperOrAdminAccess,
   },
   fields: [
     {
       name: "_isPaid",
       type: "checkbox",
       access: {
-        read: isFieldAdmin,
+        read: isSuperOrAdminFieldAccess,
         create: () => false,
         update: () => false,
       },

@@ -1,3 +1,4 @@
+import { isSuperOrAdmin, isSuperOrAdminAccess } from "../lib/payload-utils";
 import { Product, User } from "../payload-types";
 import { BeforeChangeHook } from "payload/dist/collections/config/types";
 import { Access, CollectionConfig } from "payload/types";
@@ -10,7 +11,7 @@ const addUser: BeforeChangeHook = ({ req, data }) => {
 const isYourOwnAndPurchased: Access = async ({ req }) => {
   const user = req.user as User | null;
 
-  if (user?.role === "admin" || user?.role === "super_admin") return true;
+  if (isSuperOrAdmin(user)) return true;
   if (!user) return false;
 
   const { docs: products } = await req.payload.find({
@@ -56,9 +57,6 @@ const isYourOwnAndPurchased: Access = async ({ req }) => {
   };
 };
 
-const isAdmin: Access = ({ req: { user } }) =>
-  user.role === "admin" || user.role === "super_admin";
-
 export const ProductFiles: CollectionConfig = {
   slug: "product_files",
   admin: { hidden: ({ user }) => user.role === "user" },
@@ -67,8 +65,8 @@ export const ProductFiles: CollectionConfig = {
   },
   access: {
     read: isYourOwnAndPurchased,
-    update: isAdmin,
-    delete: isAdmin,
+    update: isSuperOrAdminAccess,
+    delete: isSuperOrAdminAccess,
   },
   upload: {
     staticURL: "/storage/product_files", // URL where the files will be accessible

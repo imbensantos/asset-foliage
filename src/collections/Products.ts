@@ -8,17 +8,16 @@ import {
 import { Product, User } from "../payload-types";
 import Stripe from "stripe";
 import { AfterChangeHook } from "payload/dist/collections/config/types";
-import { isSuperAdmin } from "../lib/payload-utils";
+import { isSuperOrAdmin } from "../lib/payload-utils";
 
-const isSuperOrAdmin: FieldAccess = ({ req: { user } }) =>
-  user.role === "admin" || isSuperAdmin(user);
+const isSuperOrAdminFieldAccess: FieldAccess = ({ req: { user } }) => isSuperOrAdmin(user);
 
 const isSuperOrAdminOrHasAccess = (): Access => ({ req: { user: _user } }) => {
   const user = _user as User | undefined;
 
   if (!user) return false;
 
-  if (user.role === "admin" || isSuperAdmin(user)) return true;
+  if (isSuperOrAdmin(user)) return true;
 
   const userProductIDs = (user.products || []).reduce<Array<string>>(
     (acc, product) => {
@@ -198,9 +197,9 @@ export const Products: CollectionConfig = {
         { label: "Denied", value: "denied" },
       ],
       access: {
-        create: isSuperOrAdmin,
-        read: isSuperOrAdmin,
-        update: isSuperOrAdmin,
+        create: isSuperOrAdminFieldAccess,
+        read: isSuperOrAdminFieldAccess,
+        update: isSuperOrAdminFieldAccess,
       },
     },
     {
