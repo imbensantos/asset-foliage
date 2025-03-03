@@ -36,11 +36,13 @@ function NavItems({}: Props) {
           if (activeIndex === i) setActiveIndex(null);
           else setActiveIndex(i);
         };
+        const close = () => setActiveIndex(null)
 
         return (
           <NavItem
             key={category.value}
             category={category}
+            close={close}
             handleOpen={handleOpen}
             isAnyOpen={isAnyOpen}
             isOpen={isOpen}

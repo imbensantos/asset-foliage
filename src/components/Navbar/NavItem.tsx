@@ -12,6 +12,7 @@ type Category = (typeof PRODUCT_CATEGORIES)[number];
 
 interface NavItemProps {
   category: Category;
+  close: () => void;
   handleOpen: () => void;
   isOpen: boolean;
   isAnyOpen: boolean;
@@ -37,6 +38,7 @@ function NavItem({ category, handleOpen, isAnyOpen, isOpen }: NavItemProps) {
 
       {isOpen ? (
         <div
+          onClick={close}
           className={cn(
             "absolute inset-x-0 top-full text-sm text-muted-foreground",
             { "animate-in fade-in-10 slide-in-from-top-5": !isAnyOpen },
