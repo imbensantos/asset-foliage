@@ -81,13 +81,13 @@ export const EmailTemplate = ({
             src={`${process.env.NEXT_PUBLIC_SERVER_URL}/sign-up.webp`}
             width="150"
             height="150"
-            alt="Asset Foliage"
+            alt="AssetFoliage"
             style={logo}
           />
           <Text style={paragraph}>Hi there,</Text>
           <Text style={paragraph}>
-            Welcome to Asset Foliage, the marketplace for high quality digital
-            goods. Use the button below to {actionLabel}.
+            Welcome to AssetFoliage, a digital forest of high-quality assets, ready to explore and use. 
+            Use the button below to {actionLabel}.
           </Text>
           <Section style={btnContainer}>
             <Button style={button} href={href}>
@@ -97,7 +97,7 @@ export const EmailTemplate = ({
           <Text style={paragraph}>
             Best,
             <br />
-            The Asset Foliage Team
+            The AssetFoliage Team
           </Text>
           <Hr style={hr} />
           <Text style={footer}>

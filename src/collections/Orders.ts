@@ -15,7 +15,7 @@ export const Orders: CollectionConfig = {
   slug: "orders",
   admin: {
     useAsTitle: "Your Orders",
-    description: "A summary of all your orders on Asset Foliage.",
+    description: "A summary of all your orders on AssetFoliage.",
   },
   access: {
     read: isYourOwn,

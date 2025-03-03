@@ -50,7 +50,7 @@ export const getPayloadClient = async ({
       email: {
         transport: transporter,
         fromAddress: "assetfoliage@imbensantos.com",
-        fromName: "The Asset Foliage Team"
+        fromName: "The AssetFoliage Team"
       },
       secret: PAYLOAD_SECRET as string,
       local: initOptions?.express ? false : true,

@@ -40,7 +40,7 @@ export const ReceiptEmail = ({
   return (
     <Html>
       <Head />
-      <Preview>Your Asset Foliage Receipt</Preview>
+      <Preview>Your AssetFoliage Receipt</Preview>
 
       <Body style={main}>
         <Container style={container}>
@@ -50,7 +50,7 @@ export const ReceiptEmail = ({
                 src={`${process.env.NEXT_PUBLIC_SERVER_URL}/email-sent.webp`}
                 width='100'
                 height='100'
-                alt='Asset Foliage'
+                alt='AssetFoliage'
               />
             </Column>
 
@@ -188,7 +188,7 @@ export const ReceiptEmail = ({
             <Link href='#'>Privacy Policy </Link>
           </Text>
           <Text style={footerCopyright}>
-            Copyright © 2023 Asset Foliage Inc. <br />{' '}
+            Copyright © {new Date().getFullYear()} AssetFoliage <br />{' '}
             <Link href='#'>All rights reserved</Link>
           </Text>
         </Container>
