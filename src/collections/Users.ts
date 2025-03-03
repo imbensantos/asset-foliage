@@ -1,4 +1,4 @@
-import { isSuperAdmin } from "../lib/payload-utils";
+import { isSuperAdmin, isSuperOrAdmin } from "../lib/payload-utils";
 import { PrimaryActionEmailHtml } from "../components/emails/PrimaryActionEmail";
 import { AccessResult } from "payload/config";
 import { CollectionConfig } from "payload/types";
@@ -29,6 +29,7 @@ export const Users: CollectionConfig = {
       if (user.role === "admin") {
         return {
           role: { not_in: ["super_admin"] },
+          is_super_admin: { not_equals: true },
         };
       }
 
@@ -39,27 +40,10 @@ export const Users: CollectionConfig = {
     },
 
     // CREATE ACCESS
-    create: ({ req: { user }, data }) => {
-      // Allow public sign ups (unauthenticated users)
-      if (!user) return true;
-
-      // Super admins can create anything
-      if (isSuperAdmin(user)) return true;
-
-      // Prevent creation of super_admins by other roles
-      if (data?.role === "super_admin") return false;
-
-      // Admins can create admins and users
-      if (user.role === "admin") return true;
-
-      // Regular users cannot create anyone
-      return false;
-    },
+    create: () => true,
 
     // UPDATE ACCESS
     update: ({ req: { user } }): AccessResult => {
-      if (!user) return false;
-
       // Super admins can update anything
       if (isSuperAdmin(user)) return true;
 
@@ -79,8 +63,6 @@ export const Users: CollectionConfig = {
 
     // DELETE ACCESS
     delete: ({ req: { user } }): AccessResult => {
-      if (!user) return false;
-
       // Super admins can delete anything
       if (isSuperAdmin(user)) return true;
 
@@ -100,13 +82,7 @@ export const Users: CollectionConfig = {
   },
 
   admin: {
-    hidden: ({user}) => {
-      if(!user) return false 
-
-      if(user.role === "user") return true
-      
-      return false
-    },
+    hidden: ({user}) => user.role === "user",
     defaultColumns: ["id"]
   },
   
@@ -138,7 +114,7 @@ export const Users: CollectionConfig = {
       admin: {
         // Condition will check if user is admin
         condition: (_, __, { user }) =>
-          (user?.role === "admin" || user?.role === "super_admin" || !!user?.is_super_admin),
+          (isSuperOrAdmin(user)),
         components: {},
       },
       required: true,
@@ -156,7 +132,7 @@ export const Users: CollectionConfig = {
       type: "checkbox",
       defaultValue: false,
       admin: {
-        condition: (_, __, {user}) => user?.role === "super_admin" || !!user.is_super_admin
+        condition: (_, __, {user}) => isSuperAdmin(user)
       }
     },
   ],
