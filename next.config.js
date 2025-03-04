@@ -3,6 +3,7 @@ const isProd = process.env.NODE_ENV === "production";
 
 module.exports = {
   images: {
+    loader: "default",
     formats: ["image/avif", "image/webp"],
 
     // Allow images from your local and production environments
@@ -37,6 +38,11 @@ module.exports = {
       "imbensantos-assetfoliage.vercel.app",
       "assetfoliage.up.railway.app",
     ],
+    images: {
+      minimumCacheTTL: 60, // Cache for 1 minute
+      deviceSizes: [640, 750, 1080, 1920, 3840],
+      imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    },
   },
 
   async rewrites() {
