@@ -8,7 +8,7 @@ dotenv.config({
   path: path.resolve(__dirname, "../.env"),
 });
 
-const { PAYLOAD_SECRET, RESEND_API_KEY } = process.env
+const { RESEND_API_KEY } = process.env
 
 let cached = (global as any).payload;
 
@@ -37,10 +37,6 @@ export const getPayloadClient = async ({
   initOptions,
 }: Args = {}): Promise<Payload> => {
 
-  // if (!PAYLOAD_SECRET) {
-  //   throw new Error("PAYLOAD_SECRET env variable is missing");
-  // }
-
   if (cached.client) {
     return cached.client;
   }
@@ -52,7 +48,7 @@ export const getPayloadClient = async ({
         fromAddress: "assetfoliage@imbensantos.com",
         fromName: "The AssetFoliage Team"
       },
-      secret: PAYLOAD_SECRET as string,
+      secret: "$2a$12$yV41jtJspVp5S7eRccYSNul5EPSPUVrbGWcbLoFUJwsLiwpQBH4f2",
       local: initOptions?.express ? false : true,
       ...(initOptions || {}),
     });
