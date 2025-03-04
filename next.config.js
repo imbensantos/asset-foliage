@@ -10,6 +10,6 @@ module.exports = {
         pathname: "/storage/media/**",
       },
     ],
-    domains: ['localhost', 'imbensantos-assetfoliage.vercel.app', 'assetfoliage.imbensantos.com'],
+    domains: ['localhost', 'imbensantos-assetfoliage.vercel.app', 'assetfoliage.imbensantos.com', 'https://asset-foliage.up.railway.app/'],
   },
 };
