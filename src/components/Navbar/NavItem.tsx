@@ -63,8 +63,9 @@ function NavItem({ category, handleOpen, isAnyOpen, isOpen }: NavItemProps) {
                           <Image
                             src={item.imageSrc}
                             alt="Product Category Image"
-                            fill
                             className="cursor-pointer object-cover object-center"
+                            fill
+                            unoptimized
                           />
                         </Link>
                       </div>

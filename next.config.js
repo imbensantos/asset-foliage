@@ -37,9 +37,6 @@ module.exports = {
       "imbensantos-assetfoliage.vercel.app",
       "assetfoliage.up.railway.app",
     ],
-
-    // Ensure image optimization is on for production
-    unoptimized: false,
   },
 
   async rewrites() {
