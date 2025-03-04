@@ -17,7 +17,6 @@ module.exports = {
       {
         protocol: "https",
         hostname: "assetfoliage.up.railway.app",
-        port: "8080",
         pathname: "/storage/media/**",
       }
     ],
@@ -28,5 +27,13 @@ module.exports = {
       "asset-foliage.up.railway.app",
       "assetfoliage.up.railway.app"
     ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/storage/:path*",
+        destination: "/storage/:path*",
+      },
+    ];
   },
 };
