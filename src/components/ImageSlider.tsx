@@ -95,6 +95,7 @@ const ImageSlider = ({ urls }: Props) => {
               fill
               loading="eager"
               src={url}
+              unoptimized
             />
           </SwiperSlide>
         ))}
