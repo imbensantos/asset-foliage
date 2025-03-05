@@ -43,8 +43,8 @@ export const Media: CollectionConfig = {
     update: isSuperOrAdminOrHasAccess()
   },
   upload: {
-    staticURL: "/storage/media",
-    staticDir: "storage/media",
+    staticURL: "/storage/media", // URL where the files will be accessible
+    staticDir: "/app/storage/media", // Directory where the files will be stored on the server
     imageSizes: [
       {
         name: "thumbnail",

@@ -70,7 +70,7 @@ export const ProductFiles: CollectionConfig = {
   },
   upload: {
     staticURL: "/storage/product_files", // URL where the files will be accessible
-    staticDir: "storage/product_files",  // Directory where the files will be stored on the server
+    staticDir: "/app/storage/product_files",  // Directory where the files will be stored on the server
     mimeTypes: [
       "image/*",                   // Allow all image types
       "font/*",                     // Allow all font types

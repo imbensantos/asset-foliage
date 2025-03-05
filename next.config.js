@@ -53,7 +53,4 @@ module.exports = {
       },
     ];
   },
-
-  // Ensures Next.js works well in containers like Railway
-  output: "standalone",
 };
