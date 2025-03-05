@@ -58,6 +58,7 @@ async function ThankYouPage({ searchParams }: PageProps) {
           src="/thank-you.webp"
           className="w-fulll h-full object-contain object-center"
           alt="thank you for your order"
+          unoptimized
         />
       </div>
 
@@ -113,6 +114,7 @@ async function ThankYouPage({ searchParams }: PageProps) {
                           src={image.url}
                           alt={`${product.name} image`}
                           className="flex-none rounded-md bg-gray-100 object-cover object-center"
+                          unoptimized
                         />
                       ) : null}
                     </div>

@@ -109,6 +109,7 @@ const MobileNav = () => {
                                 src={item.imageSrc}
                                 alt="product category image"
                                 className="object-cover object-center"
+                                unoptimized
                               />
                             </div>
                             <Link

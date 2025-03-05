@@ -97,6 +97,7 @@ function Cart({ }: Props) {
                 src="/empty-cart.webp"
                 alt="empty shopping cart chameleon"
                 fill
+                unoptimized
               />
             </div>
             <div className="text-xl font-semibold">Your cart is empty</div>

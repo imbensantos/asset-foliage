@@ -24,6 +24,7 @@ function VerifyEmailPage({ searchParams }: Props) {
                 src="/email-sent.webp"
                 fill
                 alt="Chameleon Email Sent image"
+                unoptimized
               />
             </div>
 

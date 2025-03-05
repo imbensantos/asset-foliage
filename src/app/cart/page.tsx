@@ -64,6 +64,7 @@ const Page = () => {
                     fill
                     loading="eager"
                     alt="empty shopping cart"
+                    unoptimized
                   />
                 </div>
                 <h3 className="text-center text-2xl font-semibold">
@@ -98,6 +99,7 @@ const Page = () => {
                               src={image.url}
                               alt="product image"
                               className="h-full w-full rounded-md object-cover object-center sm:h-48 sm:w-48"
+                              unoptimized
                             />
                           ) : null}
                         </div>

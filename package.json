@@ -11,7 +11,9 @@
     "build:next": "next build",
     "build": "yarn build:payload && yarn build:server && yarn build:next",
     "start": "cross-env PAYLOAD_CONFIG_PATH=dist/payload.config.js NODE_ENV=production node dist/server.js",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "mkdir -p /app/storage/media /app/storage/product_files && chmod -R 777 /app/storage",
+    "preserve": "tar -czvf storage-backup-$(date +%s).tar.gz /app/storage"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
