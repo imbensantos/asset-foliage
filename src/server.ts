@@ -60,14 +60,14 @@ const start = async (): Promise<void> => {
 
   // 👉 Protect cart route to be only accessible to logged in users
   const cartRouter = express.Router();
-  cartRouter.use(payload.authenticate)
+  cartRouter.use(payload.authenticate);
   cartRouter.get("/", async (req, res) => {
     const { user, url } = req as PayloadRequest;
-    if(!user){
+    if (!user) {
       return res.redirect("/login?origin=cart");
     }
 
-    const parsedUrl = parse(url, true)
+    const parsedUrl = parse(url, true);
     return nextApp.render(req, res, "/cart", parsedUrl.query);
   });
 
@@ -79,7 +79,7 @@ const start = async (): Promise<void> => {
     trpcExpress.createExpressMiddleware({
       router: appRouter,
       createContext,
-    })
+    }),
   );
 
   // 👉 Start Next.js server
@@ -89,8 +89,22 @@ const start = async (): Promise<void> => {
   app.use((req, res) => nextHandler(req, res));
 
   app.listen(PORT, () => {
-    payload.logger.info(`🌐 NextJS App URL: ${process.env.NEXT_PUBLIC_SERVER_URL}`);
+    payload.logger.info(
+      `🌐 NextJS App URL: ${process.env.NEXT_PUBLIC_SERVER_URL}`,
+    );
   });
+
+  // PRODUCTION PATH (Railway)
+  app.use("/storage", express.static(path.join(__dirname, "../storage")));
+
+  // DEVELOPMENT PATH (Local)
+  if (process.env.NODE_ENV === "development") {
+    app.use("/storage", express.static(path.join(__dirname, "../storage")));
+  }
+
+  // For debugging purposes
+  console.log("__dirname:", __dirname);
+  console.log("Storage path:", path.join(__dirname, "../storage"));
 };
 
 start();
