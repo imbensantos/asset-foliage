@@ -18,7 +18,7 @@ interface NavItemProps {
   isAnyOpen: boolean;
 }
 
-function NavItem({ category, handleOpen, isAnyOpen, isOpen }: NavItemProps) {
+function NavItem({ category, handleOpen, isAnyOpen, isOpen, close }: NavItemProps) {
   return (
     <div className="flex">
       <div className="relative flex items-center">
@@ -38,7 +38,6 @@ function NavItem({ category, handleOpen, isAnyOpen, isOpen }: NavItemProps) {
 
       {isOpen ? (
         <div
-          onClick={close}
           className={cn(
             "absolute inset-x-0 top-full text-sm text-muted-foreground",
             { "animate-in fade-in-10 slide-in-from-top-5": !isAnyOpen },
@@ -59,7 +58,7 @@ function NavItem({ category, handleOpen, isAnyOpen, isOpen }: NavItemProps) {
                       className="group relative text-base sm:text-sm"
                     >
                       <div className="relative aspect-video overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                        <Link href={item.href}>
+                        <Link href={item.href} onClick={close}>
                           <Image
                             src={item.imageSrc}
                             alt="Product Category Image"
@@ -73,6 +72,7 @@ function NavItem({ category, handleOpen, isAnyOpen, isOpen }: NavItemProps) {
                       <Link
                         href={item.href}
                         className="mt-6 block font-medium text-gray-900"
+                        onClick={close}
                       >
                         {item.name}
                       </Link>
