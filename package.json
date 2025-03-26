@@ -10,11 +10,10 @@
     "build:server": "tsc --project tsconfig.server.json",
     "build:next": "next build",
     "build": "yarn build:payload && yarn build:server && yarn build:next",
-    "start": "mkdir -p /var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e/media /var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e/product_files && chmod -R 777 /var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e && ls -la /var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e && cross-env PAYLOAD_CONFIG_PATH=dist/payload.config.js NODE_ENV=production node dist/server.js",
+    "start": "mkdir -p /app/storage/media /app/storage/product_files && chmod -R 777 /app/storage && cross-env PAYLOAD_CONFIG_PATH=dist/payload.config.js NODE_ENV=production node dist/server.js",
     "lint": "next lint",
-    "debug:storage": "echo 'Storage directory contents:' && ls -la /var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e && echo 'Working directory:' && pwd",
-    "railway:prestart": "rm -rf ../storage && ln -s /var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e ../storage",
-    "postinstall": "mkdir -p /var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e/media /var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e/product_files && chmod -R 777 /var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e"
+    "debug:storage": "echo 'Storage directory contents:' && ls -la /app/storage && echo 'Working directory:' && pwd",
+    "postinstall": "mkdir -p /app/storage/media /app/storage/product_files && chmod -R 777 /app/storage"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
