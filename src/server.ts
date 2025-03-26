@@ -89,13 +89,13 @@ const start = async (): Promise<void> => {
   // Debug storage paths
   console.log("Current directory:", process.cwd());
   console.log("__dirname:", __dirname);
-  console.log("Storage path:", "/app/storage");
-  console.log("Storage exists:", require('fs').existsSync("/app/storage"));
-  console.log("Storage is directory:", require('fs').statSync("/app/storage").isDirectory());
-  console.log("Storage permissions:", require('fs').statSync("/app/storage").mode);
+  console.log("Storage path:", "/var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e");
+  console.log("Storage exists:", require('fs').existsSync("/var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e"));
+  console.log("Storage is directory:", require('fs').statSync("/var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e").isDirectory());
+  console.log("Storage permissions:", require('fs').statSync("/var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e").mode);
 
   // Serve static files from storage directory
-  app.use("/storage", express.static("/app/storage"));
+  app.use("/storage", express.static("/var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e"));
 
   app.use((req, res) => nextHandler(req, res));
 
