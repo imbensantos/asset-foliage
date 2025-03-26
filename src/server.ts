@@ -86,6 +86,17 @@ const start = async (): Promise<void> => {
   await nextApp.prepare();
   payload.logger.info("🚀 NextJS started");
 
+  // Debug storage paths
+  console.log("Current directory:", process.cwd());
+  console.log("__dirname:", __dirname);
+  console.log("Storage path:", "/app/storage");
+  console.log("Storage exists:", require('fs').existsSync("/app/storage"));
+  console.log("Storage is directory:", require('fs').statSync("/app/storage").isDirectory());
+  console.log("Storage permissions:", require('fs').statSync("/app/storage").mode);
+
+  // Serve static files from storage directory
+  app.use("/storage", express.static("/app/storage"));
+
   app.use((req, res) => nextHandler(req, res));
 
   app.listen(PORT, () => {
@@ -93,18 +104,6 @@ const start = async (): Promise<void> => {
       `🌐 NextJS App URL: ${process.env.NEXT_PUBLIC_SERVER_URL}`,
     );
   });
-
-  // PRODUCTION PATH (Railway)
-  app.use("/storage", express.static(path.join(__dirname, "../storage")));
-
-  // DEVELOPMENT PATH (Local)
-  if (process.env.NODE_ENV === "development") {
-    app.use("/storage", express.static(path.join(__dirname, "../storage")));
-  }
-
-  // For debugging purposes
-  console.log("__dirname:", __dirname);
-  console.log("Storage path:", path.join(__dirname, "../storage"));
 };
 
 start();
