@@ -6,7 +6,7 @@ buildCommand = "yarn build"
 startCommand = "yarn start"
 healthcheckPath = "/"
 healthcheckTimeout = 100
-restartPolicyType = "on-failure"
+restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
 
 [deploy.env]
