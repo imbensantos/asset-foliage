@@ -1,0 +1,17 @@
+[build]
+builder = "nixpacks"
+buildCommand = "yarn build"
+
+[deploy]
+startCommand = "yarn start"
+healthcheckPath = "/"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+[deploy.env]
+NODE_ENV = "production"
+
+[[deploy.volumes]]
+source = "storage"
+target = "/app/storage" 
