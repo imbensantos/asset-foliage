@@ -44,7 +44,7 @@ export const Media: CollectionConfig = {
   },
   upload: {
     staticURL: "/storage/media", // URL where the files will be accessible
-    staticDir: "/var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e/media", // Directory where the files will be stored on the server
+    staticDir: "/app/storage/media",  // Directory where the files will be stored on the server
     imageSizes: [
       {
         name: "thumbnail",

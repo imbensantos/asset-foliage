@@ -14,5 +14,5 @@ NODE_ENV = "production"
 
 [[deploy.volumes]]
 source = "storage"
-target = "/var/lib/containers/railwayapp/bind-mounts/511930f5-46d2-4d35-bdf8-40526398b939/vol_zpe4zo2zuryea55e"
+target = "/app/storage"
 type = "persistent" 
