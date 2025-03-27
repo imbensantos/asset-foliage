@@ -46,7 +46,7 @@ export const Media: CollectionConfig = {
   upload: {
     staticURL: "/storage/media", // URL where the files will be accessible
     staticDir: process.env.NODE_ENV === "production" 
-      ? "/app/storage/media"
+      ? path.join(process.env.RAILWAY_VOLUME_MOUNT_PATH || "/app/storage", "media")
       : path.join(process.cwd(), "storage", "media"),  // Directory where the files will be stored on the server
     imageSizes: [
       {

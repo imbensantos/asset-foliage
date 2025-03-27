@@ -92,7 +92,7 @@ export const ProductFiles: CollectionConfig = {
   upload: {
     staticURL: "/storage/product_files", // URL where the files will be accessible
     staticDir: process.env.NODE_ENV === "production" 
-      ? "/app/storage/product_files"
+      ? path.join(process.env.RAILWAY_VOLUME_MOUNT_PATH || "/app/storage", "product_files")
       : path.join(process.cwd(), "storage", "product_files"),  // Directory where the files will be stored on the server
     mimeTypes: [
       "image/*",                   // Allow all image types

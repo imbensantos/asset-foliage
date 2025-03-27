@@ -88,9 +88,10 @@ const start = async (): Promise<void> => {
   payload.logger.info("🚀 NextJS started");
 
   // Debug storage paths
-  const storagePath = process.env.NODE_ENV === "production" 
-    ? "/app/storage"
-    : path.join(process.cwd(), "storage");
+  const storagePath =
+    process.env.NODE_ENV === "production"
+      ? process.env.RAILWAY_VOLUME_MOUNT_PATH || "/app/storage"
+      : path.join(process.cwd(), "storage");
 
   // Create storage directory if it doesn't exist
   if (!fs.existsSync(storagePath)) {
