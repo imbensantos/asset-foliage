@@ -11,6 +11,7 @@ import nextBuild from "next/dist/build";
 import path from "path";
 import { PayloadRequest } from "payload/types";
 import { parse } from "url";
+import fs from "fs";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -87,13 +88,23 @@ const start = async (): Promise<void> => {
   payload.logger.info("🚀 NextJS started");
 
   // Debug storage paths
-  const storagePath = "/app/storage";
+  const storagePath = process.env.NODE_ENV === "production" 
+    ? "/app/storage"
+    : path.join(process.cwd(), "storage");
+
+  // Create storage directory if it doesn't exist
+  if (!fs.existsSync(storagePath)) {
+    fs.mkdirSync(storagePath, { recursive: true });
+    fs.mkdirSync(path.join(storagePath, "media"), { recursive: true });
+    fs.mkdirSync(path.join(storagePath, "product_files"), { recursive: true });
+  }
+
   console.log("Current directory:", process.cwd());
   console.log("__dirname:", __dirname);
   console.log("Storage path:", storagePath);
-  console.log("Storage exists:", require('fs').existsSync(storagePath));
-  console.log("Storage is directory:", require('fs').statSync(storagePath).isDirectory());
-  console.log("Storage permissions:", require('fs').statSync(storagePath).mode);
+  console.log("Storage exists:", fs.existsSync(storagePath));
+  console.log("Storage is directory:", fs.statSync(storagePath).isDirectory());
+  console.log("Storage permissions:", fs.statSync(storagePath).mode);
 
   // Serve static files from storage directory
   app.use("/storage", express.static(storagePath));

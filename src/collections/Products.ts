@@ -16,12 +16,11 @@ const isSuperOrAdminOrHasAccess = (): Access => ({ req: { user: _user } }) => {
   const user = _user as User | undefined;
 
   if (!user) return false;
-
   if (isSuperOrAdmin(user)) return true;
 
   const userProductIDs = (user.products || []).reduce<Array<string>>(
     (acc, product) => {
-      if (product) return acc;
+      if (!product) return acc;
 
       if (typeof product === "string") {
         acc.push(product);

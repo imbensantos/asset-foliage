@@ -1,6 +1,7 @@
 import { isSuperOrAdmin } from "../lib/payload-utils";
 import { User } from "../payload-types";
 import { Access, AccessArgs, CollectionConfig } from "payload/types";
+import path from "path";
 
 const isSuperOrAdminOrHasAccess =
   (): Access =>
@@ -44,7 +45,9 @@ export const Media: CollectionConfig = {
   },
   upload: {
     staticURL: "/storage/media", // URL where the files will be accessible
-    staticDir: "/app/storage/media",  // Directory where the files will be stored on the server
+    staticDir: process.env.NODE_ENV === "production" 
+      ? "/app/storage/media"
+      : path.join(process.cwd(), "storage", "media"),  // Directory where the files will be stored on the server
     imageSizes: [
       {
         name: "thumbnail",
