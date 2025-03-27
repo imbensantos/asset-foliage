@@ -30,7 +30,7 @@ const Page = () => {
     (total, { product }) => total + product.price,
     0,
   );
-  const fee = 0;
+  const fee = cartTotal * 0.01;
 
   // Used to avoid hydration mismatch
   useEffect(() => {
@@ -169,18 +169,20 @@ const Page = () => {
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <span>Flat Transaction Fee</span>
+                {fee > 0 && (
+                  <div className="flex items-center justify-between border-t border-gray-200 pt-4">
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <span>Transaction Fee</span>
+                    </div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {isMounted ? (
+                        formatPrice(fee)
+                      ) : (
+                        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                      )}
+                    </div>
                   </div>
-                  <div className="text-sm font-medium text-gray-900">
-                    {isMounted ? (
-                      formatPrice(fee)
-                    ) : (
-                      <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                    )}
-                  </div>
-                </div>
+                )}
 
                 <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                   <div className="text-base font-medium text-gray-900">

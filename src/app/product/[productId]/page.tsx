@@ -88,7 +88,7 @@ async function Page({ params }: PageProps) {
             <section className="mt-4">
               <div className="flex items-center">
                 <p className="font-medium text-gray-900">
-                  {formatPrice(product.price)}
+                  {product.price > 0 ? formatPrice(product.price) : "Free"}
                 </p>
                 <div className="border-lg ml-4 border-gray-300 pl-4 text-muted-foreground">
                   {label}

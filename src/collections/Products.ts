@@ -18,22 +18,12 @@ const isSuperOrAdminOrHasAccess = (): Access => ({ req: { user: _user } }) => {
   if (!user) return false;
   if (isSuperOrAdmin(user)) return true;
 
-  const userProductIDs = (user.products || []).reduce<Array<string>>(
-    (acc, product) => {
-      if (!product) return acc;
-
-      if (typeof product === "string") {
-        acc.push(product);
-      } else {
-        acc.push((product as Product).id);
-      }
-
-      return acc;
+  // Allow access to products where the user is the owner
+  return {
+    user: {
+      equals: user.id,
     },
-    [],
-  );
-
-  return { id: { in: userProductIDs } };
+  };
 };
 
 const addUser: CollectionBeforeChangeHook<Product> = async ({ req, data }) => {
